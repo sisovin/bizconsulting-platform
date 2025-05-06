@@ -45,6 +45,39 @@ services:
     networks:
       - backend_network
 
+  test:
+    image: node:14
+    container_name: test
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/bizconsulting
+    volumes:
+      - ./apps/backend:/usr/src/app
+    networks:
+      - backend_network
+    depends_on:
+      - postgres
+
+  build:
+    image: docker:latest
+    container_name: build
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./apps/backend:/usr/src/app
+    networks:
+      - backend_network
+
+  deploy:
+    image: node:14
+    container_name: deploy
+    environment:
+      - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
+      - STAGING_USER=${STAGING_USER}
+      - STAGING_HOST=${STAGING_HOST}
+    volumes:
+      - ./apps/backend:/usr/src/app
+    networks:
+      - backend_network
+
 networks:
   frontend_network:
   backend_network:

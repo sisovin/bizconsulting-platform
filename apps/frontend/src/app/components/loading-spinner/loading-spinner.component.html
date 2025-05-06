@@ -1,0 +1,4 @@
+<div [ngClass]="['loading-spinner', size, color]" [attr.aria-label]="ariaLabel">
+  <div class="spinner"></div>
+  <span *ngIf="label">{{ label }}</span>
+</div>

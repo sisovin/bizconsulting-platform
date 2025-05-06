@@ -1,0 +1,228 @@
+/* Tailwind CSS classes for styling the login component */
+.min-h-screen {
+  @apply min-h-screen;
+}
+
+.flex {
+  @apply flex;
+}
+
+.items-center {
+  @apply items-center;
+}
+
+.justify-center {
+  @apply justify-center;
+}
+
+.bg-gray-100 {
+  @apply bg-gray-100;
+}
+
+.bg-white {
+  @apply bg-white;
+}
+
+.p-8 {
+  @apply p-8;
+}
+
+.rounded-lg {
+  @apply rounded-lg;
+}
+
+.shadow-md {
+  @apply shadow-md;
+}
+
+.w-full {
+  @apply w-full;
+}
+
+.max-w-md {
+  @apply max-w-md;
+}
+
+.text-2xl {
+  @apply text-2xl;
+}
+
+.font-bold {
+  @apply font-bold;
+}
+
+.mb-6 {
+  @apply mb-6;
+}
+
+.text-center {
+  @apply text-center;
+}
+
+.mb-4 {
+  @apply mb-4;
+}
+
+.block {
+  @apply block;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.font-medium {
+  @apply font-medium;
+}
+
+.text-gray-700 {
+  @apply text-gray-700;
+}
+
+.mt-1 {
+  @apply mt-1;
+}
+
+.px-3 {
+  @apply px-3;
+}
+
+.py-2 {
+  @apply py-2;
+}
+
+.border {
+  @apply border;
+}
+
+.border-gray-300 {
+  @apply border-gray-300;
+}
+
+.rounded-md {
+  @apply rounded-md;
+}
+
+.shadow-sm {
+  @apply shadow-sm;
+}
+
+.focus\:outline-none {
+  @apply focus:outline-none;
+}
+
+.focus\:ring-indigo-500 {
+  @apply focus:ring-indigo-500;
+}
+
+.focus\:border-indigo-500 {
+  @apply focus:border-indigo-500;
+}
+
+.sm\:text-sm {
+  @apply sm:text-sm;
+}
+
+.text-red-500 {
+  @apply text-red-500;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.mt-1 {
+  @apply mt-1;
+}
+
+.mb-6 {
+  @apply mb-6;
+}
+
+.mb-4 {
+  @apply mb-4;
+}
+
+.flex {
+  @apply flex;
+}
+
+.items-center {
+  @apply items-center;
+}
+
+.justify-between {
+  @apply justify-between;
+}
+
+.w-full {
+  @apply w-full;
+}
+
+.flex {
+  @apply flex;
+}
+
+.justify-center {
+  @apply justify-center;
+}
+
+.py-2 {
+  @apply py-2;
+}
+
+.px-4 {
+  @apply px-4;
+}
+
+.border {
+  @apply border;
+}
+
+.border-transparent {
+  @apply border-transparent;
+}
+
+.rounded-md {
+  @apply rounded-md;
+}
+
+.shadow-sm {
+  @apply shadow-sm;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.font-medium {
+  @apply font-medium;
+}
+
+.text-white {
+  @apply text-white;
+}
+
+.bg-indigo-600 {
+  @apply bg-indigo-600;
+}
+
+.hover\:bg-indigo-700 {
+  @apply hover:bg-indigo-700;
+}
+
+.focus\:outline-none {
+  @apply focus:outline-none;
+}
+
+.focus\:ring-2 {
+  @apply focus:ring-2;
+}
+
+.focus\:ring-offset-2 {
+  @apply focus:ring-offset-2;
+}
+
+.focus\:ring-indigo-500 {
+  @apply focus:ring-indigo-500;
+}

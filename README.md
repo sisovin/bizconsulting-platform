@@ -196,3 +196,67 @@ This repository is a monorepo for the BizConsulting platform, which includes bot
    - `STAGING_HOST`: The hostname or IP address of your staging server.
 
 3. These secrets will be used in the GitHub Actions workflow to securely access sensitive information.
+
+### Environment Setup Guide
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/githubnext/workspace-blank.git
+   cd workspace-blank
+   ```
+
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+
+3. Set up environment variables:
+   - Create a `.env` file in the root directory.
+   - Add the following variables:
+     ```
+     DATABASE_URL=your_database_url
+     REDIS_URL=your_redis_url
+     ```
+
+### API Documentation
+
+The API documentation is available at [API Documentation](http://localhost:3000/api-docs).
+
+### Testing Instructions
+
+1. Navigate to the backend application directory:
+   ```sh
+   cd apps/backend
+   ```
+
+2. Run the tests:
+   ```sh
+   npm run test
+   ```
+
+### Deployment Checklist
+
+1. Ensure all tests pass:
+   ```sh
+   npm run test
+   ```
+
+2. Build the Docker images:
+   ```sh
+   docker-compose build
+   ```
+
+3. Push the Docker images to the registry:
+   ```sh
+   docker-compose push
+   ```
+
+4. Deploy the application:
+   ```sh
+   docker-compose up -d
+   ```
+
+5. Run database migrations:
+   ```sh
+   docker-compose run backend npm run migrate
+   ```

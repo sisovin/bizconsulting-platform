@@ -1,0 +1,216 @@
+/* Tailwind CSS classes for styling the dashboard component */
+.container {
+  @apply mx-auto p-4;
+}
+
+.text-center {
+  @apply text-center;
+}
+
+.grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.col-span-1 {
+  @apply col-span-1;
+}
+
+.col-span-2 {
+  @apply col-span-2;
+}
+
+.col-span-3 {
+  @apply col-span-3;
+}
+
+.text-xl {
+  @apply text-xl font-bold mb-2;
+}
+
+.mb-2 {
+  @apply mb-2;
+}
+
+.p-4 {
+  @apply p-4;
+}
+
+.bg-white {
+  @apply bg-white;
+}
+
+.rounded-lg {
+  @apply rounded-lg;
+}
+
+.shadow-md {
+  @apply shadow-md;
+}
+
+.text-lg {
+  @apply text-lg font-semibold;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.mt-1 {
+  @apply mt-1;
+}
+
+.mb-4 {
+  @apply mb-4;
+}
+
+.block {
+  @apply block;
+}
+
+.w-full {
+  @apply w-full;
+}
+
+.px-3 {
+  @apply px-3;
+}
+
+.py-2 {
+  @apply py-2;
+}
+
+.border {
+  @apply border;
+}
+
+.border-gray-300 {
+  @apply border-gray-300;
+}
+
+.rounded-md {
+  @apply rounded-md;
+}
+
+.shadow-sm {
+  @apply shadow-sm;
+}
+
+.focus\:outline-none {
+  @apply focus:outline-none;
+}
+
+.focus\:ring-indigo-500 {
+  @apply focus:ring-indigo-500;
+}
+
+.focus\:border-indigo-500 {
+  @apply focus:border-indigo-500;
+}
+
+.sm\:text-sm {
+  @apply sm:text-sm;
+}
+
+.text-red-500 {
+  @apply text-red-500;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.mt-1 {
+  @apply mt-1;
+}
+
+.mb-6 {
+  @apply mb-6;
+}
+
+.mb-4 {
+  @apply mb-4;
+}
+
+.flex {
+  @apply flex;
+}
+
+.items-center {
+  @apply items-center;
+}
+
+.justify-between {
+  @apply justify-between;
+}
+
+.w-full {
+  @apply w-full;
+}
+
+.flex {
+  @apply flex;
+}
+
+.justify-center {
+  @apply justify-center;
+}
+
+.py-2 {
+  @apply py-2;
+}
+
+.px-4 {
+  @apply px-4;
+}
+
+.border {
+  @apply border;
+}
+
+.border-transparent {
+  @apply border-transparent;
+}
+
+.rounded-md {
+  @apply rounded-md;
+}
+
+.shadow-sm {
+  @apply shadow-sm;
+}
+
+.text-sm {
+  @apply text-sm;
+}
+
+.font-medium {
+  @apply font-medium;
+}
+
+.text-white {
+  @apply text-white;
+}
+
+.bg-indigo-600 {
+  @apply bg-indigo-600;
+}
+
+.hover\:bg-indigo-700 {
+  @apply hover:bg-indigo-700;
+}
+
+.focus\:outline-none {
+  @apply focus:outline-none;
+}
+
+.focus\:ring-2 {
+  @apply focus:ring-2;
+}
+
+.focus\:ring-offset-2 {
+  @apply focus:ring-offset-2;
+}
+
+.focus\:ring-indigo-500 {
+  @apply focus:ring-indigo-500;
+}

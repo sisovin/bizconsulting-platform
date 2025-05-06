@@ -7,10 +7,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
 import { AuthApiService } from './services/auth-api.service';
+import { InvestmentDashboardComponent } from './investment-dashboard/investment-dashboard.component';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'investment-dashboard', component: InvestmentDashboardComponent },
   // Add more routes here as needed
 ];
 
@@ -18,6 +20,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
+    InvestmentDashboardComponent,
     // Add more components here as needed
   ],
   imports: [

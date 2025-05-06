@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { RateLimiterModule } from 'nestjs-rate-limiter';
+import { PrismaModule } from 'nestjs-prisma';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RateLimiterModule } from 'nestjs-rate-limiter';
       signOptions: { expiresIn: '60m' },
     }),
     RateLimiterModule,
+    PrismaModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { PrismaModule } from 'nestjs-prisma';
 import { UserModule } from './user/user.module';
 import { InvestmentModule } from './investment/investment.module';
 import { AuthModule } from './auth/auth.module';
@@ -9,15 +9,8 @@ import { RateLimiterModule } from 'nestjs-rate-limiter';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'test',
-      password: 'test',
-      database: 'test',
-      autoLoadEntities: true,
-      synchronize: true,
+    PrismaModule.forRoot({
+      isGlobal: true,
     }),
     UserModule,
     InvestmentModule,

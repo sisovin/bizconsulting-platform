@@ -1,31 +1,17 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { PrismaService } from 'nestjs-prisma';
 import { PortfolioData, RecentTransaction, PerformanceMetric } from '@libs/interfaces/src/investment.interface';
-import { PortfolioEntity } from './entities/portfolio.entity';
-import { TransactionEntity } from './entities/transaction.entity';
-import { MetricEntity } from './entities/metric.entity';
 import { CreateInvestmentDto } from './dto/create-investment.dto';
 import { UpdateInvestmentDto } from './dto/update-investment.dto';
 import { PaginationDto } from './dto/pagination.dto';
-import { InvestmentEntity } from './entities/investment.entity';
 import { User } from '../user/user.entity';
 
 @Injectable()
 export class InvestmentService {
-  constructor(
-    @InjectRepository(PortfolioEntity)
-    private readonly portfolioRepository: Repository<PortfolioEntity>,
-    @InjectRepository(TransactionEntity)
-    private readonly transactionRepository: Repository<TransactionEntity>,
-    @InjectRepository(MetricEntity)
-    private readonly metricRepository: Repository<MetricEntity>,
-    @InjectRepository(InvestmentEntity)
-    private readonly investmentRepository: Repository<InvestmentEntity>,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async getPortfolioData(): Promise<PortfolioData> {
-    const portfolioData = await this.portfolioRepository.find();
+    const portfolioData = await this.prisma.portfolio.findMany();
     return {
       dates: portfolioData.map(data => data.date),
       values: portfolioData.map(data => data.value),
@@ -33,53 +19,65 @@ export class InvestmentService {
   }
 
   async getRecentTransactions(): Promise<RecentTransaction[]> {
-    return this.transactionRepository.find({
-      order: { date: 'DESC' },
+    return this.prisma.transaction.findMany({
+      orderBy: { date: 'desc' },
       take: 10,
     });
   }
 
   async getPerformanceMetrics(): Promise<PerformanceMetric[]> {
-    return this.metricRepository.find();
+    return this.prisma.metric.findMany();
   }
 
-  async createInvestment(createInvestmentDto: CreateInvestmentDto, user: User): Promise<InvestmentEntity> {
-    const investment = this.investmentRepository.create({ ...createInvestmentDto, owner: user });
-    return this.investmentRepository.save(investment);
+  async createInvestment(createInvestmentDto: CreateInvestmentDto, user: User): Promise<any> {
+    const investment = await this.prisma.investment.create({
+      data: {
+        ...createInvestmentDto,
+        owner: { connect: { id: user.id } },
+      },
+    });
+    return investment;
   }
 
-  async findAll(paginationDto: PaginationDto, user: User): Promise<InvestmentEntity[]> {
+  async findAll(paginationDto: PaginationDto, user: User): Promise<any[]> {
     const { page, limit } = paginationDto;
-    const [result, total] = await this.investmentRepository.findAndCount({
-      where: { owner: user },
+    const investments = await this.prisma.investment.findMany({
+      where: { ownerId: user.id },
       take: limit,
       skip: (page - 1) * limit,
     });
-    return result;
+    return investments;
   }
 
-  async findOne(id: string, user: User): Promise<InvestmentEntity> {
-    const investment = await this.investmentRepository.findOne({ where: { id, owner: user } });
+  async findOne(id: string, user: User): Promise<any> {
+    const investment = await this.prisma.investment.findFirst({
+      where: { id, ownerId: user.id },
+    });
     if (!investment) {
       throw new NotFoundException(`Investment with ID ${id} not found`);
     }
     return investment;
   }
 
-  async updateInvestment(id: string, updateInvestmentDto: UpdateInvestmentDto, user: User): Promise<InvestmentEntity> {
+  async updateInvestment(id: string, updateInvestmentDto: UpdateInvestmentDto, user: User): Promise<any> {
     const investment = await this.findOne(id, user);
-    if (investment.owner.id !== user.id) {
+    if (investment.ownerId !== user.id) {
       throw new ForbiddenException('You do not have permission to update this investment');
     }
-    Object.assign(investment, updateInvestmentDto);
-    return this.investmentRepository.save(investment);
+    const updatedInvestment = await this.prisma.investment.update({
+      where: { id },
+      data: updateInvestmentDto,
+    });
+    return updatedInvestment;
   }
 
   async removeInvestment(id: string, user: User): Promise<void> {
     const investment = await this.findOne(id, user);
-    if (investment.owner.id !== user.id) {
+    if (investment.ownerId !== user.id) {
       throw new ForbiddenException('You do not have permission to delete this investment');
     }
-    await this.investmentRepository.remove(investment);
+    await this.prisma.investment.delete({
+      where: { id },
+    });
   }
 }

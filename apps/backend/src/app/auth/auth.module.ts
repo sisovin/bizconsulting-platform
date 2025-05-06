@@ -6,16 +6,23 @@ import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { RateLimiterModule } from 'nestjs-rate-limiter';
 import { PrismaModule } from 'nestjs-prisma';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: 'your_jwt_secret_key',
-      signOptions: { expiresIn: '60m' },
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN', '60m') },
+      }),
+      inject: [ConfigService],
     }),
     RateLimiterModule,
     PrismaModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })

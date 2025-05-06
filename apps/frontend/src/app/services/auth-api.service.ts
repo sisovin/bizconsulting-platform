@@ -9,7 +9,7 @@ import { fetchWrapper } from '@libs/utils/src/api.utils';
   providedIn: 'root'
 })
 export class AuthApiService {
-  private apiUrl = 'http://localhost:3000/api/auth';
+  private apiUrl = process.env['API_URL'] || 'http://localhost:3000/api/auth';
 
   constructor(private http: HttpClient) {}
 

@@ -83,6 +83,22 @@ This repository is a monorepo for the BizConsulting platform, which includes bot
 
 3. The backend server will be running at `http://localhost:3000`.
 
+### Running the Project with Docker
+
+1. Ensure you have Docker and Docker Compose installed on your machine.
+
+2. Navigate to the root directory of the project:
+   ```sh
+   cd workspace-blank
+   ```
+
+3. Start the services using Docker Compose:
+   ```sh
+   docker-compose up --build
+   ```
+
+4. The frontend application will be available at `http://localhost`, and the backend application will be available at `http://localhost:3000`.
+
 ## Contributing
 
 We welcome contributions to the BizConsulting platform! To contribute, please follow these steps:

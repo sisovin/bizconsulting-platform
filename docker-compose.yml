@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: nginx:latest
+    container_name: frontend
+    ports:
+      - "80:80"
+    volumes:
+      - ./apps/frontend:/usr/share/nginx/html
+    networks:
+      - frontend_network
+
+  backend:
+    image: node:14
+    container_name: backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/bizconsulting
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./apps/backend:/usr/src/app
+    networks:
+      - backend_network
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=bizconsulting
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    networks:
+      - backend_network
+
+networks:
+  frontend_network:
+  backend_network:
+
+volumes:
+  postgres_data:

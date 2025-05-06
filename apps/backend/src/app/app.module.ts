@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { InvestmentModule } from './investment/investment.module';
 import { AuthModule } from './auth/auth.module';
+import { RateLimiterModule } from 'nestjs-rate-limiter';
 
 @Module({
   imports: [
@@ -21,6 +22,10 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     InvestmentModule,
     AuthModule,
+    RateLimiterModule.forRoot({
+      points: 10, // Number of points
+      duration: 60, // Per second(s)
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

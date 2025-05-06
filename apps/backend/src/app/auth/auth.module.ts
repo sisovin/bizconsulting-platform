@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
+import { RateLimiterModule } from 'nestjs-rate-limiter';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { JwtStrategy } from './jwt.strategy';
       secret: 'your_jwt_secret_key',
       signOptions: { expiresIn: '60m' },
     }),
+    RateLimiterModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
 })

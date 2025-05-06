@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { LoginResponse, RegisterResponse, RefreshTokenResponse } from '@libs/interfaces/src/auth.interface';
+import { fetchWrapper } from '@libs/utils/src/api.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -13,21 +14,60 @@ export class AuthApiService {
   constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
-      catchError(this.handleError)
-    );
+    return new Observable<LoginResponse>((observer) => {
+      fetchWrapper<LoginResponse>(`${this.apiUrl}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => {
+        observer.next(response);
+        observer.complete();
+      })
+      .catch(error => {
+        observer.error(error);
+      });
+    });
   }
 
   register(email: string, password: string): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, { email, password }).pipe(
-      catchError(this.handleError)
-    );
+    return new Observable<RegisterResponse>((observer) => {
+      fetchWrapper<RegisterResponse>(`${this.apiUrl}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => {
+        observer.next(response);
+        observer.complete();
+      })
+      .catch(error => {
+        observer.error(error);
+      });
+    });
   }
 
   refreshToken(token: string): Observable<RefreshTokenResponse> {
-    return this.http.post<RefreshTokenResponse>(`${this.apiUrl}/refresh-token`, { token }).pipe(
-      catchError(this.handleError)
-    );
+    return new Observable<RefreshTokenResponse>((observer) => {
+      fetchWrapper<RefreshTokenResponse>(`${this.apiUrl}/refresh-token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ token })
+      })
+      .then(response => {
+        observer.next(response);
+        observer.complete();
+      })
+      .catch(error => {
+        observer.error(error);
+      });
+    });
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {

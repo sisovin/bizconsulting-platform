@@ -2,18 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import { UserService } from '../user/user.service';
-import { User } from '../user/user.entity';
+import { PrismaService } from 'nestjs-prisma';
 import { RegisterDto } from './dto/register.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.prisma.user.findUnique({ where: { email } });
     if (user && await argon2.verify(user.password, password)) {
       return user;
     }
@@ -30,9 +32,11 @@ export class AuthService {
 
   async register(registerDto: RegisterDto) {
     const hashedPassword = await argon2.hash(registerDto.password);
-    const user = await this.userService.create({
-      ...registerDto,
-      password: hashedPassword,
+    const user = await this.prisma.user.create({
+      data: {
+        ...registerDto,
+        password: hashedPassword,
+      },
     });
     return user;
   }
@@ -40,7 +44,7 @@ export class AuthService {
   async refreshToken(token: string) {
     try {
       const payload = this.jwtService.verify(token);
-      const user = await this.userService.findByEmail(payload.email);
+      const user = await this.prisma.user.findUnique({ where: { email: payload.email } });
       if (user) {
         return this.login(user);
       }

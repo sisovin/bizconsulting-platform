@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
 import { AuthApiService } from './services/auth-api.service';
 import { InvestmentDashboardComponent } from './investment-dashboard/investment-dashboard.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -21,6 +22,7 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     InvestmentDashboardComponent,
+    LoadingSpinnerComponent,
     // Add more components here as needed
   ],
   imports: [

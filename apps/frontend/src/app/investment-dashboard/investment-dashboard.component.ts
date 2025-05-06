@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
+import { PortfolioMetrics } from '@libs/interfaces/src/investment.interface';
 
 @Component({
   selector: 'app-investment-dashboard',
@@ -8,9 +9,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./investment-dashboard.component.css']
 })
 export class InvestmentDashboardComponent implements OnInit {
-  portfolioData: any;
+  portfolioData: PortfolioMetrics;
   recentTransactions: any[];
-  performanceMetrics: any;
+  performanceMetrics: PortfolioMetrics;
   loading: boolean = true;
 
   constructor(private http: HttpClient) {}
@@ -22,7 +23,7 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   fetchPortfolioData(): void {
-    this.http.get('/api/portfolio-data').subscribe(data => {
+    this.http.get<PortfolioMetrics>('/api/portfolio-data').subscribe(data => {
       this.portfolioData = data;
       this.loading = false;
       this.renderChart();
@@ -36,7 +37,7 @@ export class InvestmentDashboardComponent implements OnInit {
   }
 
   fetchPerformanceMetrics(): void {
-    this.http.get('/api/performance-metrics').subscribe(data => {
+    this.http.get<PortfolioMetrics>('/api/performance-metrics').subscribe(data => {
       this.performanceMetrics = data;
     });
   }

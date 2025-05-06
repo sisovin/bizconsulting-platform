@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { PortfolioData, RecentTransaction, PerformanceMetric } from '@libs/interfaces/src/investment.interface';
+import { PortfolioData, RecentTransaction, PerformanceMetric, PortfolioMetrics, ApiResponse } from '@libs/interfaces/src/investment.interface';
 import { CreateInvestmentDto } from './dto/create-investment.dto';
 import { UpdateInvestmentDto } from './dto/update-investment.dto';
 import { PaginationDto } from './dto/pagination.dto';
@@ -10,11 +10,16 @@ import { User } from '../user/user.entity';
 export class InvestmentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getPortfolioData(): Promise<PortfolioData> {
+  async getPortfolioData(): Promise<PortfolioMetrics> {
     const portfolioData = await this.prisma.portfolio.findMany();
+    const totalValue = portfolioData.reduce((acc, data) => acc + data.value, 0);
+    const averageReturn = totalValue / portfolioData.length;
+    const riskLevel = this.calculateRiskLevel(totalValue);
+
     return {
-      dates: portfolioData.map(data => data.date),
-      values: portfolioData.map(data => data.value),
+      totalValue,
+      averageReturn,
+      riskLevel,
     };
   }
 
@@ -25,18 +30,30 @@ export class InvestmentService {
     });
   }
 
-  async getPerformanceMetrics(): Promise<PerformanceMetric[]> {
-    return this.prisma.metric.findMany();
+  async getPerformanceMetrics(): Promise<PortfolioMetrics> {
+    const metrics = await this.prisma.metric.findMany();
+    const totalValue = metrics.reduce((acc, metric) => acc + metric.value, 0);
+    const averageReturn = totalValue / metrics.length;
+    const riskLevel = this.calculateRiskLevel(totalValue);
+
+    return {
+      totalValue,
+      averageReturn,
+      riskLevel,
+    };
   }
 
-  async createInvestment(createInvestmentDto: CreateInvestmentDto, user: User): Promise<any> {
+  async createInvestment(createInvestmentDto: CreateInvestmentDto, user: User): Promise<ApiResponse<any>> {
     const investment = await this.prisma.investment.create({
       data: {
         ...createInvestmentDto,
         owner: { connect: { id: user.id } },
       },
     });
-    return investment;
+    return {
+      success: true,
+      data: investment,
+    };
   }
 
   async findAll(paginationDto: PaginationDto, user: User): Promise<any[]> {
@@ -79,5 +96,15 @@ export class InvestmentService {
     await this.prisma.investment.delete({
       where: { id },
     });
+  }
+
+  private calculateRiskLevel(totalValue: number): RiskLevel {
+    if (totalValue < 10000) {
+      return RiskLevel.LOW;
+    } else if (totalValue < 50000) {
+      return RiskLevel.MEDIUM;
+    } else {
+      return RiskLevel.HIGH;
+    }
   }
 }

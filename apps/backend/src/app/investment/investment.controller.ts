@@ -1,5 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query, UseGuards, Req } from '@nestjs/common';
 import { InvestmentService } from './investment.service';
+import { CreateInvestmentDto } from './dto/create-investment.dto';
+import { UpdateInvestmentDto } from './dto/update-investment.dto';
+import { PaginationDto } from './dto/pagination.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Request } from 'express';
 
 @Controller('investment')
 export class InvestmentController {
@@ -18,5 +23,35 @@ export class InvestmentController {
   @Get('performance-metrics')
   getPerformanceMetrics() {
     return this.investmentService.getPerformanceMetrics();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  create(@Body() createInvestmentDto: CreateInvestmentDto, @Req() req: Request) {
+    return this.investmentService.createInvestment(createInvestmentDto, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
+    return this.investmentService.findAll(paginationDto, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  findOne(@Param('id') id: string, @Req() req: Request) {
+    return this.investmentService.findOne(id, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateInvestmentDto: UpdateInvestmentDto, @Req() req: Request) {
+    return this.investmentService.updateInvestment(id, updateInvestmentDto, req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  remove(@Param('id') id: string, @Req() req: Request) {
+    return this.investmentService.removeInvestment(id, req.user);
   }
 }

@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 import { AuthApiService } from './services/auth-api.service';
 import { InvestmentDashboardComponent } from './investment-dashboard/investment-dashboard.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -36,6 +37,7 @@ const appRoutes: Routes = [
   providers: [
     AuthService,
     AuthApiService,
+    AuthGuard,
     // Add providers here as needed
   ],
   bootstrap: [AppComponent]

@@ -15,3 +15,12 @@ export interface RefreshTokenResponse {
   refreshToken: string;
   expiresIn: number;
 }
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface RefreshTokenDto {
+  token: string;
+}

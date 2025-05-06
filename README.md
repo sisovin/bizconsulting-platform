@@ -1,262 +1,214 @@
 # BizConsulting Platform
 
-This repository is a monorepo for the BizConsulting platform, which includes both frontend and backend applications, as well as shared libraries.
+Welcome to the **BizConsulting Platform**, an advanced platform designed to streamline business consulting processes with a focus on scalability, performance, and security. This documentation will guide you through the features, setup, and best practices for contributing to the platform.
 
-## Repository Structure
+---
 
-```
-├── apps/
-│   ├── frontend/ (Angular 19)
-│   │   ├── src/
-│   │   │   ├── app/
-│   └── backend/ (NestJS)
-│       ├── src/
-│       │   ├── app/
-├── libs/ (shared libraries)
-│   ├── interfaces/
-│   │   ├── src/
-│   │   │   ├── investment.interface.ts
-│   │   │   ├── user.interface.ts
-│   │   │   └── index.ts
-│   │   └── tsconfig.json
-│   └── utils/
-│       ├── src/
-│       │   ├── api.utils.ts
-│       │   ├── date.utils.ts
-│       │   └── index.ts
-│       └── tsconfig.json
-│
-├── package.json (workspace root)
-├── nx.json
-├── tsconfig.base.json
-├── .prettierrc
-└── .eslintrc.json
-```
+## Table of Contents
 
-## Setting Up and Running the Project
+- [Overview](#overview)
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Code Guidelines](#code-guidelines)
+- [Security Best Practices](#security-best-practices)
+- [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+---
+
+## Overview
+
+The **BizConsulting Platform** is a robust application designed to facilitate business consulting workflows. It provides tools for data visualization, task management, and client interaction. Built with a modern tech stack, it ensures seamless integration, high performance, and top-notch security.
+
+---
+
+## Features
+
+- **Data Visualization**: Interactive dashboards with charts and graphs powered by Chart.js.
+- **Task Management**: Manage projects, tasks, and workflows efficiently.
+- **Secure Authentication**: Uses JWT for authentication and argon2 for password hashing.
+- **Responsive Design**: Built with Tailwind CSS for a fully responsive and modern UI.
+- **Highly Typed Codebase**: Ensures strict TypeScript typing and interfaces for maintainability.
+- **Production-Grade Error Handling**: A robust system for handling errors across the application.
+- **Scalability**: Designed with scalability in mind using NestJS and Prisma ORM.
+
+---
+
+## Technology Stack
+
+The platform is built with the following technologies:
+
+- **Frontend**: Angular 19 with TypeScript (strict mode enabled).
+- **Backend**: NestJS framework with TypeScript.
+- **Database**: Prisma ORM for database management and schema migrations.
+- **Styling**: Tailwind CSS for responsive, modern UI design.
+- **Libraries**:
+  - **Chart.js**: For data visualization and interactive charts.
+  - **RXJS**: For reactive programming in Angular.
+  - **argon2**: For secure password hashing.
+  - **jsonwebtoken**: For secure user authentication.
+
+---
+
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-- Angular CLI (v12 or higher)
-- NestJS CLI (v7 or higher)
+Ensure you have the following installed:
+
+1. **Node.js**: Version 18 or higher.
+2. **npm** or **yarn**: Package manager.
+3. **TypeScript**: Version 4.9 or higher with strict mode enabled.
+4. **PostgreSQL**: For the database (or any database supported by Prisma).
 
 ### Installation
 
 1. Clone the repository:
-   ```sh
-   git clone https://github.com/githubnext/workspace-blank.git
-   cd workspace-blank
+   ```bash
+   git clone https://github.com/sisovin/bizconsulting-platform.git
    ```
 
-2. Install dependencies:
-   ```sh
+2. Navigate to the project directory:
+   ```bash
+   cd bizconsulting-platform
+   ```
+
+3. Install dependencies:
+   ```bash
    npm install
    ```
 
-### Running the Frontend Application
-
-1. Navigate to the frontend application directory:
-   ```sh
-   cd apps/frontend
+4. Set up the database with Prisma:
+   ```bash
+   npx prisma migrate dev
    ```
 
-2. Start the development server:
-   ```sh
-   ng serve
+5. Start the development server:
+   ```bash
+   npm run start
    ```
 
-3. Open your browser and navigate to `http://localhost:4200`.
-
-### Running the Backend Application
-
-1. Navigate to the backend application directory:
-   ```sh
-   cd apps/backend
+6. Open your browser and navigate to:
+   ```
+   http://localhost:4200
    ```
 
-2. Start the development server:
-   ```sh
-   npm run start:dev
+---
+
+## Code Guidelines
+
+### TypeScript Strict Mode
+
+Strict TypeScript mode must be enabled in the `tsconfig.json` file to ensure robust code quality. This includes:
+
+- `strictNullChecks`
+- `noImplicitAny`
+- `strictPropertyInitialization`
+
+### Proper Typing and Interfaces
+
+All functions, classes, and components must use explicit typings and interfaces. Avoid using `any` unless absolutely necessary.
+
+### Error Handling
+
+Use production-grade error handling with global interceptors and middleware. All errors should be logged and provide meaningful messages to users without exposing sensitive information.
+
+Example:
+```typescript
+@Catch(HttpException)
+export class HttpErrorFilter extends BaseExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const status = exception.getStatus();
+
+    response.status(status).json({
+      statusCode: status,
+      message: exception.message,
+    });
+  }
+}
+```
+
+---
+
+## Security Best Practices
+
+1. **JWT Authentication**: Ensure token expiration and signature validation.
+2. **argon2 Password Hashing**: Use `argon2` for secure password storage.
+3. **Environment Variables**: Store sensitive configurations (e.g., JWT secret) in `.env` files.
+
+Example `.env` variables:
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/bizconsulting
+JWT_SECRET=your-secret-key
+```
+
+4. **CORS Configuration**: Restrict access to trusted domains.
+5. **Input Validation**: Validate all user inputs using class-validator in NestJS.
+
+---
+
+## Folder Structure
+
+```
+bizconsulting-platform/
+├── src/
+│   ├── app/              # Angular application components
+│   ├── assets/           # Static assets
+│   ├── environments/     # Environment-specific configurations
+│   ├── styles/           # Tailwind CSS styles
+│   ├── main.ts           # Angular entry point
+│   └── index.html        # Main HTML file
+├── prisma/               # Prisma schema and migrations
+├── server/               # NestJS backend application
+│   ├── auth/             # Authentication module
+│   ├── users/            # User management module
+│   ├── guards/           # Security guards
+│   └── main.ts           # NestJS entry point
+├── .env                  # Environment variables
+├── package.json          # Project metadata and dependencies
+├── README.md             # Project documentation
+```
+
+---
+
+## Contributing
+
+We welcome contributions to enhance the BizConsulting Platform. Here's how you can contribute:
+
+1. Fork the repository.
+2. Create a feature branch:
+   ```bash
+   git checkout -b feature/your-feature-name
    ```
-
-3. The backend server will be running at `http://localhost:3000`.
-
-### Running the Project with Docker
-
-1. Ensure you have Docker and Docker Compose installed on your machine.
-
-2. Navigate to the root directory of the project:
-   ```sh
-   cd workspace-blank
+3. Commit your changes:
+   ```bash
+   git commit -m "Add your message"
    ```
-
-3. Start the services using Docker Compose:
-   ```sh
-   docker-compose up --build
+4. Push to the branch:
+   ```bash
+   git push origin feature/your-feature-name
    ```
+5. Open a pull request.
 
-4. The frontend application will be available at `http://localhost`, and the backend application will be available at `http://localhost:3000`.
+---
 
-### Setting Up and Running the GitHub Actions Workflow
+## License
 
-1. Ensure you have a GitHub repository for your project.
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). You are free to use, modify, and distribute this software in compliance with the license.
 
-2. Create a `.github/workflows` directory in the root of your project if it doesn't already exist.
+---
 
-3. Add a `ci.yml` file to the `.github/workflows` directory with the following content:
-   ```yaml
-   name: CI/CD Pipeline
+## Contact
 
-   on:
-     pull_request:
-       branches:
-         - main
-     push:
-       branches:
-         - main
+For questions, suggestions, or support, please contact the repository owner:
 
-   jobs:
-     test:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
+- **GitHub**: [sisovin](https://github.com/sisovin)
 
-         - name: Set up Node.js
-           uses: actions/setup-node@v2
-           with:
-             node-version: '14'
-
-         - name: Install dependencies
-           run: npm install
-
-         - name: Run tests
-           run: npm run test
-
-     build:
-       runs-on: ubuntu-latest
-       needs: test
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-
-         - name: Set up Docker Buildx
-           uses: docker/setup-buildx-action@v1
-
-         - name: Log in to Docker Hub
-           uses: docker/login-action@v1
-           with:
-             username: ${{ secrets.DOCKER_USERNAME }}
-             password: ${{ secrets.DOCKER_PASSWORD }}
-
-         - name: Build and push Docker image
-           uses: docker/build-push-action@v2
-           with:
-             context: .
-             push: true
-             tags: ${{ secrets.DOCKER_USERNAME }}/bizconsulting-platform:latest
-
-     deploy:
-       runs-on: ubuntu-latest
-       needs: build
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-
-         - name: Set up SSH
-           uses: webfactory/ssh-agent@v0.5.3
-           with:
-             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-         - name: Deploy to staging
-           run: |
-             ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
-             docker pull ${{ secrets.DOCKER_USERNAME }}/bizconsulting-platform:latest
-             docker-compose -f /path/to/docker-compose.yml up -d
-             EOF
-
-         - name: Run database migrations
-           run: |
-             ssh -o StrictHostKeyChecking=no ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
-             docker-compose -f /path/to/docker-compose.yml run backend npm run migrate
-             EOF
-   ```
-
-### Using Environment Secrets
-
-1. In your GitHub repository, navigate to `Settings` > `Secrets` > `Actions`.
-
-2. Add the following secrets:
-   - `DOCKER_USERNAME`: Your Docker Hub username.
-   - `DOCKER_PASSWORD`: Your Docker Hub password.
-   - `SSH_PRIVATE_KEY`: The private key for SSH access to your staging server.
-   - `STAGING_USER`: The username for SSH access to your staging server.
-   - `STAGING_HOST`: The hostname or IP address of your staging server.
-
-3. These secrets will be used in the GitHub Actions workflow to securely access sensitive information.
-
-### Environment Setup Guide
-
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/githubnext/workspace-blank.git
-   cd workspace-blank
-   ```
-
-2. Install dependencies:
-   ```sh
-   npm install
-   ```
-
-3. Set up environment variables:
-   - Create a `.env` file in the root directory.
-   - Add the following variables:
-     ```
-     DATABASE_URL=your_database_url
-     REDIS_URL=your_redis_url
-     ```
-
-### API Documentation
-
-The API documentation is available at [API Documentation](http://localhost:3000/api-docs).
-
-### Testing Instructions
-
-1. Navigate to the backend application directory:
-   ```sh
-   cd apps/backend
-   ```
-
-2. Run the tests:
-   ```sh
-   npm run test
-   ```
-
-### Deployment Checklist
-
-1. Ensure all tests pass:
-   ```sh
-   npm run test
-   ```
-
-2. Build the Docker images:
-   ```sh
-   docker-compose build
-   ```
-
-3. Push the Docker images to the registry:
-   ```sh
-   docker-compose push
-   ```
-
-4. Deploy the application:
-   ```sh
-   docker-compose up -d
-   ```
-
-5. Run database migrations:
-   ```sh
-   docker-compose run backend npm run migrate
-   ```
+Feel free to open an issue in the repository if you encounter any problems or have feature requests.

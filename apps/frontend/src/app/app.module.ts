@@ -4,15 +4,19 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth.service';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
+  { path: 'login', component: LoginComponent },
   // Add more routes here as needed
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     // Add more components here as needed
   ],
   imports: [
@@ -24,6 +28,7 @@ const appRoutes: Routes = [
     // Add more modules here as needed
   ],
   providers: [
+    AuthService,
     // Add providers here as needed
   ],
   bootstrap: [AppComponent]

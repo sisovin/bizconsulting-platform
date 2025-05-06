@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './services/auth.service';
+import { AuthApiService } from './services/auth-api.service';
 
 const appRoutes: Routes = [
   { path: '', component: AppComponent },
@@ -29,6 +30,7 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthService,
+    AuthApiService,
     // Add providers here as needed
   ],
   bootstrap: [AppComponent]

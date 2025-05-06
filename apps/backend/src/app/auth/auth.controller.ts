@@ -5,6 +5,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { RateLimiterGuard } from 'nestjs-rate-limiter';
+import { formatApiResponse, handleApiError } from '@libs/utils/src/api.utils';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,11 +18,16 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   @UseGuards(RateLimiterGuard)
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(loginDto.email, loginDto.password);
-    if (!user) {
-      return { message: 'Invalid credentials' };
+    try {
+      const user = await this.authService.validateUser(loginDto.email, loginDto.password);
+      if (!user) {
+        return formatApiResponse({ message: 'Invalid credentials' }, 'Error', 401);
+      }
+      const tokens = await this.authService.login(user);
+      return formatApiResponse(tokens);
+    } catch (error) {
+      return handleApiError(error);
     }
-    return this.authService.login(user);
   }
 
   @Post('register')
@@ -30,7 +36,12 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Invalid data' })
   @UseGuards(RateLimiterGuard)
   async register(@Body() registerDto: RegisterDto) {
-    return this.authService.register(registerDto);
+    try {
+      const user = await this.authService.register(registerDto);
+      return formatApiResponse(user, 'Registration successful', 201);
+    } catch (error) {
+      return handleApiError(error);
+    }
   }
 
   @Get('refresh')
@@ -39,10 +50,14 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid token' })
   @UseGuards(RateLimiterGuard)
   async refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
-    const tokens = await this.authService.refreshToken(refreshTokenDto.token);
-    if (!tokens) {
-      return { message: 'Invalid token' };
+    try {
+      const tokens = await this.authService.refreshToken(refreshTokenDto.token);
+      if (!tokens) {
+        return formatApiResponse({ message: 'Invalid token' }, 'Error', 401);
+      }
+      return formatApiResponse(tokens);
+    } catch (error) {
+      return handleApiError(error);
     }
-    return tokens;
   }
 }

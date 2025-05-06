@@ -5,6 +5,7 @@ import { UpdateInvestmentDto } from './dto/update-investment.dto';
 import { PaginationDto } from './dto/pagination.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Request } from 'express';
+import { calculatePagination } from '@libs/utils/src/api.utils';
 
 @Controller('investment')
 export class InvestmentController {
@@ -34,7 +35,9 @@ export class InvestmentController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Query() paginationDto: PaginationDto, @Req() req: Request) {
-    return this.investmentService.findAll(paginationDto, req.user);
+    const { page, limit } = paginationDto;
+    const { skip, take } = calculatePagination(page, limit);
+    return this.investmentService.findAll({ ...paginationDto, skip, take }, req.user);
   }
 
   @UseGuards(JwtAuthGuard)
